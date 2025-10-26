@@ -68,7 +68,7 @@ class UserController(private val userService: UserService) {
         if (updated != null) ResponseEntity.ok(updated.toResponse())
         else ResponseEntity.notFound().build()
     } catch (ex: DataIntegrityViolationException) {
-        ResponseEntity.status(409).build() // email çakışması -> 409 Conflict
+        ResponseEntity.status(409).build() // conflicting emails -> 409 Conflict
     }
 
     @DeleteMapping("/{id}")
@@ -80,9 +80,3 @@ class UserController(private val userService: UserService) {
     }
 }
 
-// Eğer sonuç tekil (id, email gibi unique alanla arama) → ResponseEntity<DTO>
-// Eğer sonuç çoğul (name, parça arama gibi unique olmayan alanla arama) → List<DTO>
-
-//kaynağı benzersiz olarak tanımlayan id gibi şeyler: PathVariable
-//opsiyonel/filtreleyici parametreler: RequestParam
-//detaylı bir body create edilecek ya da güncellenecekse RequestBody

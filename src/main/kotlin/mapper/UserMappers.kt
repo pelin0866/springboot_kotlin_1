@@ -1,8 +1,6 @@
 package org.example.mapper
 
-import org.example.dto.CreateUserRequest
-import org.example.dto.UpdateUserRequest
-import org.example.dto.UserResponse
+import org.example.dto.*
 import org.example.model.User
 
 // DTO -> Entity (create)
@@ -17,6 +15,12 @@ fun User.toResponse(): UserResponse =
         email = this.email
     )
 
-// Update DTO -> Entity (copy ile güncelle)
 fun UpdateUserRequest.applyTo(entity: User): User =
     entity.copy(name = this.name, email = this.email)
+
+fun User.toWithPostsResponse() = UserWithPostsResponse(
+    id= requireNotNull(this.id),
+    name = this.name,
+    email = this.email,
+    posts = this.posts.map { PostSummary(id= requireNotNull(it.id), title = it.title) }
+)

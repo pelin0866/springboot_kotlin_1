@@ -4,7 +4,6 @@ package org.example.dto
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 
-// PUT için tam güncelleme: alanlar zorunlu
 data class UpdateUserRequest(
     @field:NotBlank(message = "name boş olamaz")
     val name: String,

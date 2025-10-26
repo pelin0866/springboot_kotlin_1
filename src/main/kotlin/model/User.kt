@@ -5,16 +5,15 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "users")
 data class User(
-    @Id //primary key id atadık, ısmı prımar key yapmak mantıksızdı,cunku ıkı tane ali eklenemezdı
+    @Id //primary key: id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null, //sadece isim ve mail de versek h2 db otomatık olarak id atayacak
-    //nullable Long yani null da olabilir demek
+    val id: Long? = null,
 
-    @Column(nullable = false) //nullable=false bu alan bos olamaz demek
+    @Column(nullable = false)
     val name:String,
 
-    @Column(nullable = false, unique = true) //bu alan bos olamaz ve bu allanda tekar eden deger olamaz
-    val email: String, //yine aynı mailden ikinci kez eklemeye calısırsan hata alırsın
+    @Column(nullable = false, unique = true)
+    val email: String,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     //@JoinColumn()

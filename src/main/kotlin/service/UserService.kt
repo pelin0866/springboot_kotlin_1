@@ -17,12 +17,11 @@ class UserService(private val userRepository: UserRepository) {
 
     fun getUserByEmail(email: String): User? = userRepository.findByEmail(email)
 
-    //isme gore arama: parca eslesmesı ve case sensetive
+    //searching part by part and case sensetive
     fun searchUsersByName(name: String): List<User> = userRepository.findAllByNameContainingIgnoreCase(name)
 
     fun getUserById(id: Long): User? = userRepository.findById(id).orElse(null)
-    //Hazır gelen metotlar (findById, findAllById vs.) → Java API’sinden miras, bu yüzden Optional<T> döner.
-    //Bu yüzden findById(id) bize Optional<User> döndürüyor, biz de .orElse(null) ile User?’a çeviriyoruz.
+
 
     fun deleteById(id: Long) = userRepository.deleteById(id)
 
@@ -32,7 +31,6 @@ class UserService(private val userRepository: UserRepository) {
         return try {
             userRepository.save(updated)
         } catch (ex: DataIntegrityViolationException) {
-            // email unique ihlali gibi durumlarda 409 vereceğiz (Controller’dan)
             throw ex
         }
     }

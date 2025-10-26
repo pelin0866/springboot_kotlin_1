@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 @Service
 class PostService(
     private val postRepository: PostRepository,
-    private val userService: UserService // user'ı kontrol etmek için
+    private val userService: UserService // to control also user
 ) {
     fun create(userId: Long, req: CreatePostRequest): Post? {
         val user = userService.getUserById(userId) ?: return null

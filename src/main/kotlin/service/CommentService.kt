@@ -25,7 +25,6 @@ class CommentService(
 
     fun update(postId: Long, commentId: Long, newComment: String): Comment?{
         val existing = commentRepository.findById(commentId).orElse(null) ?: return null
-        // İsteğe bağlı sıkı kontrol: yorum gerçekten bu post'a mı ait?
         if (existing.post.id != postId) return null
         val updated = existing.copy(comment = newComment)
         return commentRepository.save(updated)
