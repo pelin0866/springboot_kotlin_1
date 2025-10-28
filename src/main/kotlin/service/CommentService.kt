@@ -6,7 +6,9 @@ import org.example.model.Comment
 import org.example.repository.CommentRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Service
 
+@Service
 class CommentService(
     private val commentRepository: CommentRepository,
     private val postService: PostService
