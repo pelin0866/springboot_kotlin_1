@@ -12,5 +12,5 @@ data class CommentResponse(
 )
 
 data class UpdateCommentRequest(
-    val comment: String
+    @field:NotBlank val comment: String
 )

@@ -47,12 +47,12 @@ class PostController(
     @PutMapping("/posts/{postId}")
     fun updatePost(
         @PathVariable postId: Long,
-        @RequestBody req: UpdatePostRequest
-    ): ResponseEntity<PostResponse> {
-        val updated = postService.update(postId, req.title, req.content)
-            ?: return ResponseEntity.notFound().build()
-        return ResponseEntity.ok(updated.toResponse())
-    }
+        @Valid @RequestBody req: UpdatePostRequest
+    ): ResponseEntity<PostResponse> =
+        postService.update(postId, req)
+            ?.let { ResponseEntity.ok(it.toResponse()) }
+            ?: ResponseEntity.notFound().build()
+    
 
     // DELETE post: /posts/{postId}
     @DeleteMapping("/posts/{postId}")

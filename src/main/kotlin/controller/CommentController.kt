@@ -19,6 +19,7 @@ class CommentController(
     private val commentService: CommentService
 ) {
 
+    // POST /posts/{post_id}/comments
     @PostMapping("/posts/{postId}/comments")
     fun addComment(
         @PathVariable("postId") postId: Long,
@@ -29,13 +30,14 @@ class CommentController(
         return ResponseEntity.ok(saved.toResponse())
     }
 
+    // GET /posts/{post_id}/comments?page=0&size=10&sort=id,desc
     @GetMapping("/posts/{post_id}/comments")
     fun listComment(
         @PathVariable("postId") postId: Long,
         @ParameterObject @PageableDefault(size=10) pageable: Pageable
     ): Page<CommentResponse> = commentService.listByPost(postId, pageable).map {it.toResponse()}
 
-
+    // GET /posts/{post_id}/comments/{comment_id}
     @GetMapping("/posts/{post_id}/comments/{comment_id}")
     fun getCommentById(
         @PathVariable("postId") postId: Long,
@@ -46,17 +48,19 @@ class CommentController(
         return ResponseEntity.ok(found.toResponse())
     }
 
+    // PUT /posts/{post_id}/comments/{comment_id}
     @PutMapping("/posts/{postId}/comments/{commentId}")
     fun updateComment(
         @PathVariable("postId") postId: Long,
         @PathVariable("commentId") commentId: Long,
         @Valid @RequestBody req: UpdateCommentRequest
-    ): ResponseEntity<CommentResponse> {
-        val updated = commentService.update(postId,commentId, req.comment)
-            ?: return ResponseEntity.notFound().build()
-        return ResponseEntity.ok(updated.toResponse())
-    }
+    ): ResponseEntity<CommentResponse> =
+        commentService.update(postId, commentId, req)
+            ?.let { ResponseEntity.ok(it.toResponse()) }
+            ?: ResponseEntity.notFound().build()
 
+
+    // DELETE /comments/{comment_id}
     @DeleteMapping("/comments/{comment_id}")
     fun deleteComment(
         @PathVariable("commentId") commentId: Long

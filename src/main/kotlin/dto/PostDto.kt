@@ -11,5 +11,9 @@ data class PostResponse(
     val title: String,
     val content: String
 )
-// UPDATE post: /posts/{postId}
-data class UpdatePostRequest(val title: String, val content: String)
+
+data class UpdatePostRequest(
+    @field:NotBlank val title :String,
+    @field:NotBlank val content:String
+)
+
