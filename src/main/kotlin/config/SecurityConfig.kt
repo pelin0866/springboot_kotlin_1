@@ -12,7 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.example.config.UserDetailsServiceImpl
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
+import org.springframework.web.bind.annotation.GetMapping
 
+@EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 class SecurityConfig(
     private val uds: UserDetailsServiceImpl,
@@ -43,4 +47,5 @@ class SecurityConfig(
             }
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
+
 }

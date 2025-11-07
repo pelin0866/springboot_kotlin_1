@@ -19,17 +19,15 @@ class AuthController(
     private val authManager: AuthenticationManager,
     private val jwt: JwtService
 ) {
-
     @PostMapping("/register")
     fun register(@Valid @RequestBody req: RegisterRequest): ResponseEntity<AuthResponse> {
         if (userRepo.findByEmail(req.email) != null) return ResponseEntity.status(409).build()
         val user = org.example.model.User(
             name = req.name,
-            email = req.email
-        ).apply {
-            password = encoder.encode(req.password)
+            email = req.email,
+            password = encoder.encode(req.password),
             role = Role.USER
-        }
+        )
         val saved = userRepo.save(user)
         val token = jwt.generate(saved.email, saved.role.name)
         return ResponseEntity.ok(AuthResponse(token))
@@ -41,5 +39,13 @@ class AuthController(
         val u = userRepo.findByEmail(req.email)!!
         val token = jwt.generate(u.email, u.role.name)
         return ResponseEntity.ok(AuthResponse(token))
+    }
+
+    // Return the user authenticated with JWT
+    @GetMapping("/me")
+    fun me(principal: java.security.Principal?): ResponseEntity<MeResponse> {
+        principal ?: return ResponseEntity.status(401).build()
+        val u = userRepo.findByEmail(principal.name) ?: return ResponseEntity.status(401).build()
+        return ResponseEntity.ok(MeResponse(email = u.email, name = u.name, role = u.role.name))
     }
 }

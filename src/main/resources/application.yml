@@ -18,4 +18,7 @@ spring:
   spring:
     profiles:
       active: h2
-
+app:
+  jwt:
+    secret: "change-me-please-change-me-please-32B!"
+    expiration-minutes: 60

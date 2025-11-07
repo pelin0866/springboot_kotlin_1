@@ -2,6 +2,7 @@ package org.example.controller
 
 import org.example.service.LikeService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.*
 class LikeController(
     private val likeService: LikeService
 ) {
-    //POST /posts/{postId}/likes/{userId}
+    //POST /posts/{postId}/likes/{userId
+    //anyone can like when user is logged-in
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping("/{userId}")
     fun like(
         @PathVariable postId: Long,
@@ -20,7 +23,10 @@ class LikeController(
             ResponseEntity.noContent().build()
         else
             ResponseEntity.status(409).build() //409 conflict, liked already
+
     // DELETE /posts/{postId}/likes/{userId}
+    // only can admin delete the likes or like owner
+    @PreAuthorize("hasRole('ADMIN') or @authz.likedBy(principal?.name, #postId)")
     @DeleteMapping("/{userId}")
     fun unlike(
         @PathVariable postId: Long,
