@@ -7,13 +7,18 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class OpenApiConfig {
-
     @Bean
-    fun customOpenAPI(): OpenAPI =
-        OpenAPI().info(
-            Info()
-                .title("Kotlin JWT Blog API")
-                .version("v1")
-                .description("Users, Posts, Comments, Likes + JWT auth & role-based authorization")
-        )
+    fun openAPI(): io.swagger.v3.oas.models.OpenAPI =
+        io.swagger.v3.oas.models.OpenAPI()
+            .info(io.swagger.v3.oas.models.info.Info()
+                .title("Demo API")
+                .version("v1"))
+            .components(io.swagger.v3.oas.models.Components().addSecuritySchemes(
+                "bearer-jwt",
+                io.swagger.v3.oas.models.security.SecurityScheme()
+                    .type(io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP)
+                    .scheme("bearer")
+                    .bearerFormat("JWT")
+            ))
+            .addSecurityItem(io.swagger.v3.oas.models.security.SecurityRequirement().addList("bearer-jwt"))
 }
