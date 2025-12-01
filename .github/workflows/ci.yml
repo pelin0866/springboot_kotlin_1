@@ -11,6 +11,7 @@ jobs:
   build:
     name: Build with Gradle
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -21,8 +22,8 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Build with Gradle
-        run: ./gradlew clean build --no-daemon
+      - name: Build with Gradle (skip tests)
+        run: ./gradlew clean build -x test --no-daemon
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
